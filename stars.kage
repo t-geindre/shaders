@@ -1,0 +1,31 @@
+package main
+
+var Scroll float
+var ShiftX float
+var Time float
+
+var Color vec4
+var Size float
+var Prob float
+
+func rand(st vec2) float {
+    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+}
+
+func Fragment(pos4 vec4, _ vec2, _ vec4) vec4 {
+    pos2 := vec2(pos4.x + ShiftX, mod(pos4.y + Scroll, 800))
+
+    pos := floor(1.0 / Size * pos2)
+	n := rand(pos)
+
+    if n < Prob {
+        return vec4(0)
+    }
+
+    t := 0.9 + 0.6 * sin(Time * 1.0 + (n - Prob) / (1.0 - Prob) * 45.0);
+
+    center := Size * pos + vec2(Size) * 0.5;
+    color :=  1.0 - distance(pos2, center) / (0.5 * Size);
+
+    return vec4(Color*color*t)
+}

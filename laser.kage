@@ -1,0 +1,22 @@
+package main
+
+var Thickness float
+var From vec2
+var To vec2
+var Color vec4
+
+func segment(p, a, b vec2) float {
+    pa := p - a
+    ba := b - a
+
+    h := clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+    idk := length(pa - ba*h);
+
+    return smoothstep(Thickness, 0.0, idk);
+}
+
+func Fragment(pos4 vec4, _ vec2, _ vec4) vec4 {
+    p := pos4.xy
+    c := Color * segment(p, From, To)
+    return c * c.a
+}
